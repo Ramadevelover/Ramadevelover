@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Quiz</title>
+  <style>
+    /* style.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #ecf0f1;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#game-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 700px;
+    width: 90%;
+    animation: fadeIn 1s ease-in-out;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #f39c12;
+    animation: slideDown 1s ease-in-out;
+}
+
+#question-container {
+    margin: 20px 0;
+    animation: zoomIn 0.8s ease-in-out;
+}
+
+#answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+button {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    animation: slideUp 0.8s ease-in-out;
+}
+
+button:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+/* style.css */
+#navbar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+#menu-btn {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Default Navbar Horizontal */
+#dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 20px; /* Tetap berada di sebelah tombol menu */
+    right: 70px; /* Memberi jarak horizontal */
+    background: #34495e;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex; /* Default horizontal layout */
+    flex-direction: row;
+    gap: 5px;
+}
+
+#dropdown-menu button {
+    
+    color: #ecf0f1;
+    border: none;
+    text-align: center;
+    margin: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 40px;
+}
+
+#dropdown-menu button:hover {
+    background: #1abc9c;
+}
+
+/* Menu muncul ketika aktif */
+#menu-btn.active + #dropdown-menu {
+    display: flex;
+}
+
+/* Responsif: Layout berubah menjadi vertikal di layar kecil */
+@media (max-width: 768px) {
+    #dropdown-menu {
+        position: static; /* Tidak lagi absolut */
+        display: none; /* Tersembunyi saat tidak aktif */
+        flex-direction: column; /* Ubah menjadi vertikal */
+        gap: 10px; /* Tambahkan jarak antar tombol */
+        width: 100%; /* Tombol memanjang penuh */
+        background: #34495e;
+        padding: 10px;
+    }
+
+    #menu-btn.active + #dropdown-menu {
+        display: flex; /* Tampilkan menu */
+    }
+
+    #dropdown-menu button {
+        padding: 15px;
+        font-size: 1.2em; /* Ukuran lebih besar di layar kecil */
+    }
+}
+
+/* Tambahkan transisi untuk animasi responsif */
+@keyframes slideIn {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+#dropdown-menu button {
+    animation: slideIn 0.5s ease-in-out;
+}
+
+  </style>
+</head>
+<body>
+        <button id="restart-btn" style="display: none;">Mulai Lagi</button>
+    </div>
+
+    <div id="game-container">
+        <div id="navbar">
+            <button id="menu-btn">☰</button>
+            <div id="dropdown-menu">
+                <button onclick="selectCategory('logika')">Soal Logika</button>
+                <button onclick="selectCategory('perhitungan')">Soal Perhitungan</button>
+                <button onclick="selectCategory('pengetahuan')">Soal Pengetahuan Umum</button>
+                <button onclick="selectCategory('bahasa')">Soal Bahasa</button>
+                <a href="https://www.tiktok.com/@ramaxb?_t=8rkHJ3xJxg4&_r=1" target="_blank">
+                    <a href="https://www.tiktok.com/@ramaxb?_t=8rkHJ3xJxg4&_r=1" target="">
+                    <button>Bantu follow TT @ramaxb</button>
+                  </a>
+                  
+
+            </div>
+        </div>
+        <h1>Game Quiz</h1>
+        <div id="question-container">
+            <p id="question-text"></p>
+            <div id="answers"></div>
+        </div>
+        <button id="restart-btn" style="display: none;">Mulai Lagi</button>
+    </div>
+
+    <script>
+        // script.js
+const categories = {
+    logika: [
+        {
+            text: "semua burung memiliki sayap dan yang memiliki sayap pasti bisa terbang apakah semua burung bisa terbang?",
+            answers: [
+                { text: "Bisa kan ada sayap", next: -2 },
+                { text: "Enggak bisa", next: -1 },
+                { text: "Keduanya salah", next: -3 },
+            ],
+        },
+
+        {
+            text: "Sebuah jam digital menunjukan angka 10:10 berapa sudut antara kedua jarum?",
+            answers: [
+                { text: "10 derajat", next: -2 },
+                { text: "9 derajat", next: -3 },
+                { text: "0 derajat", next: -1 },
+                { text: "2 derajat", next: -4 },
+            ],
+        },
+        
+        {
+            text: "Ada ayam bernama asan, sedang berjalan, asan berjenis kelamin apa??",
+            answers: [
+                { text: "Bisa jadi dua duanya", next: -2 },
+                { text: "Perempuan", next: -3 },
+                { text: "Tidak diketahui", next: -1 },
+                { text: "Laki laki", next: -4 },
+
+            ],
+        },
+
+        {
+            text: "apa yang selalu datang tapi tidak pernah tiba?",
+            answers: [
+                { text: "Besok", next: -1 },
+                { text: "Kemarin", next: -2 },
+                { text: "Dahulu", next: -3 },
+                { text: "Kepercayaan", next: -4 },
+            ],
+        },
+    ],
+    perhitungan: [
+        {
+            text: "Jika 5 + 5 = 25 dan 3 + 3 = 9, berapa hasil 2 + 2?",
+            answers: [
+                { text: "16", next: -2 },
+                { text: "4", next: -1 },
+                { text: "40", next: -3},
+            ],
+        },
+
+        {
+            text: "1+1?",
+            answers: [
+                { text: "Gatau", next: -2 },
+                { text: "Jendela", next: -1 },
+                { text: "2", next: -3},
+                { text: "4", next: -4},
+            ],
+        },
+
+        {
+            text: "Berapa hasil dari 15 x 4?",
+            answers: [
+                { text: "60", next: -1 },
+                { text: "40", next: -2 },
+            ],
+        },
+    ],
+    pengetahuan: [
+        {
+            text: "Sebutkan nama planet terbesar di tata surya kita!",
+            answers: [
+                { text: "Jupiter", next: -1 },
+                { text: "Bumi", next: -2 },
+            ],
+        },
+
+        {
+            text: "Negara apa yang memiliki pulau terbanyak?",
+            answers: [
+                { text: "Swedia", next: -1 },
+                { text: "Indonesia", next: -2 },
+                { text: "Inggris", next: -3 },
+                { text: "Malaysia", next: -4 },
+            ],
+        },
+
+        {
+            text: "Siapa yang menemukan prinsip hukum daya apung?",
+            answers: [
+                { text: "Plato", next: -3 },
+                { text: "Nicola Tesla", next: -2 },
+                { text: "Archimedes", next: -1 },
+                { text: "Pythagoras", next: -4 },
+            ],
+        },
+
+        {
+            text: "Sungai terpanjang di dunia?",
+            answers: [
+                { text: "Sungai Amazon", next: -4 },
+                { text: "Sungai Brazil", next: -2 },
+                { text: "Sungai infrat", next: -3 },
+                { text: "Sungai Nill", next: -1 },
+            ],
+        },
+
+        {
+            text: "Siapa nama dewa perang di mitilogi yunani? Clue(kalo yang main game GOW pasti tau)",
+            answers: [
+                { text: "Kratos", next: -2 },
+                { text: "Ares", next: -1 },
+                { text: "Athena", next: -3 },
+                { text: "Arthur", next: -4 },
+            ],
+        },
+
+        {
+            text: "Di mekanika kuantum, apasih nama kucing yg dijadikan experimen, menggambarkan superposisi?",
+            answers: [
+                { text: "Kucing Babilo`nomin", next: -3 },
+                { text: "Kucing Hanserdan", next: -2 },
+                { text: "Kucing Schodinger", next: -1 },
+                { text: "Kucing Schoot", next: -4 },
+            ],
+        },
+        {
+            text: "Siapa penemu hukum gravitasi?",
+            answers: [
+                { text: "Alberst Einstein", next: -3 },
+                { text: "Nocola Tesla", next: -2 },
+                { text: "Isaac Newton", next: -1 },
+                { text: "Thomas Alva Edison", next: -4 },
+            ],
+        },
+
+        {
+            text: "Siapa penemu teori kuantum?",
+            answers: [
+                { text: "Max Planck", next: -1 },
+                { text: "Nicola Tesla", next: -2 },
+                { text: "Marcus Aurelius", next: -3 },
+                { text: "Aristoteles", next: -4 },
+            ],
+        },
+        {
+            text: "Planet pertama apa yang ditemukan mengunakan teleskop?",
+            answers: [
+                { text: "Neptunus", next: -4 },
+                { text: "Mars", next: -2 },
+                { text: "Jupiter", next: -3 },
+                { text: "Uranus", next: -1 },
+            ],
+        },
+
+        {
+            text: "Siapa penemu lampu pijar?",
+            answers: [
+                { text: "Thomas Alva Edison", next: -1 },
+                { text: "Nikola Tesla", next: -2 },
+            ],
+        },
+    ],
+    bahasa: [
+        {
+            text: "Apa arti 'Selamat Pagi' dalam Bahasa Inggris?",
+            answers: [
+                { text: "Good Morning", next: -1 },
+                { text: "Good Afternoon", next: -2 },
+            ],
+        },
+        {
+            text: "Mana yang benar: 'mempesona' atau 'memesona'?",
+            answers: [
+                { text: "Memesona", next: -1 },
+                { text: "Mempesona", next: -2 },
+              
+            ],
+        },
+        {
+            text: "Mana yang benar: 'aktivitas' atau 'aktifitas'?",
+            answers: [
+                { text: "Aktifitas", next: -2 },
+                { text: "Aktivitas", next: -1 },
+              
+            ],
+        },
+        {
+            text: "Mana yang benar: 'praktek' atau 'praktis'?",
+            answers: [
+                { text: "praktek", next: -1 },
+                { text: "praktis", next: -2 },
+              
+            ],
+        },
+        {
+            text: "Mana yang benar: 'sudah tau' atau 'sudah tahu'?",
+            answers: [
+                { text: "Sudah Tau", next: -2 },
+                { text: "Sudah Tahu", next: -1 },
+            ],
+        },
+    ],
+    acak: [], // Akan diisi dari gabungan semua kategori
+};
+
+// Variabel dan elemen DOM
+const questionText = document.getElementById("question-text");
+const answersContainer = document.getElementById("answers");
+const restartBtn = document.getElementById("restart-btn");
+const menuBtn = document.getElementById("menu-btn");
+const dropdownMenu = document.getElementById("dropdown-menu");
+
+let currentCategory = [];
+let currentQuestionIndex = 0;
+let score = 100; // Nilai awal 100
+
+// Membuka dan menutup menu dropdown
+menuBtn.addEventListener("click", () => {
+    menuBtn.classList.toggle("active");
+    dropdownMenu.style.display = menuBtn.classList.contains("active") ? "block" : "none";
+});
+
+// Fungsi memilih kategori
+function selectCategory(category) {
+    menuBtn.classList.remove("active");
+    dropdownMenu.style.display = "none";
+
+    if (category === "acak") {
+        currentCategory = Object.values(categories).flat(); // Gabungkan semua kategori
+    } else {
+        currentCategory = categories[category];
+    }
+
+    currentQuestionIndex = 0;
+    score = 100; // Reset nilai
+    showQuestion(currentQuestionIndex);
+}
+
+// Menampilkan pertanyaan berdasarkan indeks
+function showQuestion(index) {
+    const question = currentCategory[index];
+    if (!question) {
+        questionText.textContent = "Tidak ada pertanyaan dalam kategori ini.";
+        answersContainer.innerHTML = "";
+        showScore();
+        return;
+    }
+
+    questionText.textContent = question.text;
+    answersContainer.innerHTML = "";
+
+    question.answers.forEach((answer, i) => {
+        const button = document.createElement("button");
+        button.textContent = answer.text;
+        button.onclick = () => {
+            if (answer.next === -1) {
+                alert("Benar! Lanjutkan ke soal berikutnya.");
+                currentQuestionIndex++;
+                if (currentQuestionIndex < currentCategory.length) {
+                    showQuestion(currentQuestionIndex);
+                } else {
+                    questionText.textContent = "Kamu telah menyelesaikan semua soal! Pilih kategori lain.";
+                    answersContainer.innerHTML = "";
+                    restartBtn.style.display = "block";
+                    showScore();
+                }
+            } else {
+                // Mengurangi nilai jika jawabannya salah
+                alert("Salah! Coba lagi.");
+                score -= 10; // Mengurangi nilai 10 untuk setiap jawaban salah
+                // Menampilkan pesan salah di halaman
+                const wrongAnswerMessage = document.createElement("p");
+                wrongAnswerMessage.textContent = "Jawaban Salah! Coba lagi.";
+                wrongAnswerMessage.style.color = "red";
+                questionText.appendChild(wrongAnswerMessage);
+
+                // Menunggu beberapa detik sebelum menghapus pesan salah
+                setTimeout(() => {
+                    wrongAnswerMessage.remove();
+                }, 1500);
+            }
+        };
+        answersContainer.appendChild(button);
+    });
+}
+
+// Fungsi untuk menampilkan nilai akhir dan level
+function showScore() {
+    let level = "";
+    if (score === 100) {
+        level = "Genius";
+    } else if (score >= 80) {
+        level = "Lumayan";
+    } else if (score >= 50) {
+        level = "Bodoh";
+    } else {
+        level = "Bodoh";
+    }
+
+    const scoreMessage = document.createElement("p");
+    scoreMessage.textContent = `Nilai Anda: ${score} - Level: ${level}`;
+    scoreMessage.style.fontSize = "1.5em";
+    scoreMessage.style.color = "#f39c12";
+    questionText.appendChild(scoreMessage);
+}
+
+// Mengatur ulang kuis
+restartBtn.addEventListener("click", () => {
+    currentQuestionIndex = 0;
+    score = 100; // Reset nilai
+    showQuestion(currentQuestionIndex);
+    restartBtn.style.display = "none";
+});
+
+// Pilih kategori awal (default)
+selectCategory("logika");
+        </script>
+        
+</body>
+
+</html>
